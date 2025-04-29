@@ -13,48 +13,54 @@
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
 
-#include <iostream>
+#include <stdexcept>
+#include <cstddef>
 
-template <class T>
-class Array{
-    private:
-        T *tab;
-        unsigned int size;
-    public:
-        Array(){
+template <typename T>
+class Array {
+private:
+    T* data;
+    std::size_t length;
 
-        }
-        Array(unsigned int size){
-            this->size = size;
-            this->tab = new[size];
-            for(unsigned int i = 0; i < size; i++){
-                this->tab[i] = NULL;
-            } 
-        }
-        ~Array(){
-            for(unsigned int i = 0; i < size; i++){
-                delete this->tab[i];
-            }
-            delete tab[];
-        }
-        Array(const Array &other){
+public:
+    Array() : data(NULL), length(0) {}
 
-        }
-        Array &operator=(const Array &other){
+    Array(unsigned int n) : data(new T[n]()), length(n) {}
 
-        }
+    Array(const Array& other) : data(new T[other.length]), length(other.length) {
+        for (std::size_t i = 0; i < length; ++i)
+            data[i] = other.data[i];
+    }
 
-        T *getTab() const{
-            return (this->tab);
+    Array& operator=(const Array& other) {
+        if (this != &other) {
+            delete[] data;
+            length = other.length;
+            data = new T[length];
+            for (std::size_t i = 0; i < length; ++i)
+                data[i] = other.data[i];
         }
-        void setTab(T const *arr){
-            this->tab = arr;
-        }
+        return *this;
+    }
+    ~Array() {
+        delete[] data;
+    }
 
-        unsigned int size(){
-            return (this->size);
-        }
+    T& operator[](std::size_t index) {
+        if (index >= length)
+            throw std::out_of_range("Index out of bounds");
+        return data[index];
+    }
+
+    const T& operator[](std::size_t index) const {
+        if (index >= length)
+            throw std::out_of_range("Index out of bounds");
+        return data[index];
+    }
+
+    std::size_t size() const {
+        return length;
+    }
 };
-
 
 #endif

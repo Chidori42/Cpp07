@@ -1,7 +1,7 @@
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 SRCS =	main.cpp
 
-NAME = Templates
+NAME = Array_templates
 
 OBJECTS = $(SRCS:.cpp=.o)
 
@@ -9,7 +9,7 @@ RM = rm -f
 
 all: $(NAME)
 
-%.o: %.cpp  iter.hpp
+%.o: %.cpp  Array.hpp
 	c++ $(CFLAGS) -c -o $@ $<
 
 $(NAME): $(OBJECTS)
